@@ -52,7 +52,7 @@ uvicorn src.main:app --reload
 ```
 
 ### 📁 Project Structure
-
+```
 src/
   auth/        # authentication logic
   db/          # database setup
@@ -61,4 +61,4 @@ src/
   services/    # business logic
 
 migrations/    # alembic migrations
-
+```
