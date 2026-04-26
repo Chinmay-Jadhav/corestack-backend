@@ -3,8 +3,11 @@ from .schemas import UserCreateModel, UserModel, UserLoginModel
 from .service import UserService
 from src.db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
+from .dependencies import RefreshTokenBearer, AccessTokenBearer
+from src.db.redis import add_jti_to_blocklist
+
 from .utils import HashHelper
-from datetime import timedelta
+from datetime import timedelta, datetime
 from fastapi.responses import JSONResponse
 
 auth_router = APIRouter()
@@ -67,3 +70,32 @@ async def login_users(login_data : UserLoginModel, session : AsyncSession = Depe
             )
         
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+
+@auth_router.get("/refresh_token")
+async def get_new_access_token(token_details : dict = Depends(RefreshTokenBearer())) :
+
+    new_access_token = HashHelper.create_access_token(
+        user_data= {
+            "uid" : token_details["sub"]
+        }
+    )
+
+    return JSONResponse(content={"access_token" : new_access_token})
+    
+@auth_router.get('/logout')
+async def revoke_token(token_details : dict = Depends(AccessTokenBearer())) :
+    
+    jti = token_details['jti']
+
+    await add_jti_to_blocklist(jti)
+
+    return JSONResponse(
+        content={"message" : "Logged out successfully"},
+        status_code=status.HTTP_200_OK
+    )
+
+
+
+
+    
+    
