@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from .schemas import UserCreateModel, UserModel, UserLoginModel
+from .schemas import UserCreateModel, UserModel, UserLoginModel, UserBooksModel
 from .service import UserService
 from src.db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
-from .dependencies import RefreshTokenBearer, AccessTokenBearer
+from .dependencies import RefreshTokenBearer, AccessTokenBearer, get_current_user, RoleChecker
 from src.db.redis import add_jti_to_blocklist
 
 from .utils import HashHelper
@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 
 auth_router = APIRouter()
 user_service = UserService()
+role_checker = RoleChecker(allowed_roles=["admin", "user"])
 
 REFRESH_TOKEN_EXPIRY = 2
 
@@ -44,7 +45,8 @@ async def login_users(login_data : UserLoginModel, session : AsyncSession = Depe
             access_token = HashHelper.create_access_token(
                 user_data = {
                     "email" : user.email,
-                    'uid' : str(user.uid)
+                    'uid' : str(user.uid),
+                    "role" : user.role
                 }
                                                           )
             
@@ -81,6 +83,13 @@ async def get_new_access_token(token_details : dict = Depends(RefreshTokenBearer
     )
 
     return JSONResponse(content={"access_token" : new_access_token})
+
+@auth_router.get('/me', response_model=UserBooksModel)
+async def get_current_user(
+    user = Depends(get_current_user),
+    _ : bool = Depends(role_checker)
+) :
+    return user
     
 @auth_router.get('/logout')
 async def revoke_token(token_details : dict = Depends(AccessTokenBearer())) :
@@ -96,6 +105,6 @@ async def revoke_token(token_details : dict = Depends(AccessTokenBearer())) :
 
 
 
-
     
     
+ 

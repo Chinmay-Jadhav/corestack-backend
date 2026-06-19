@@ -1,4 +1,4 @@
-from .models import User
+from src.db.models import User
 from .schemas import UserCreateModel
 from .utils import HashHelper
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -15,6 +15,13 @@ class UserService :
 
         return user
     
+    async def get_user_by_id(self, user_id : str, session : AsyncSession) :
+        statement = select(User).where(User.uid == user_id)
+
+        result = await session.exec(statement)
+
+        return result.first()
+    
     async def user_exists(self, email : str, session : AsyncSession) :
         user = await self.get_user_by_email(email, session)
 
@@ -29,6 +36,7 @@ class UserService :
         new_user = User(**user_data_dict)
 
         new_user.password_hash = HashHelper.hash_password(password)
+        new_user.role = "user"
 
         session.add(new_user)
 
