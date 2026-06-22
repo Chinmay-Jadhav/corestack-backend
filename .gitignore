@@ -30,3 +30,4 @@ Thumbs.db
 #Testing
 .coverage
 htmlcov/
+pytest_practice/
