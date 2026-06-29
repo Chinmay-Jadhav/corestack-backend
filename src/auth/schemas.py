@@ -4,6 +4,7 @@ from datetime import datetime, date
 from typing import Optional, List
 
 from src.db import models
+from src.reviews.schemas import ReviewModel
 
 class UserCreateModel(BaseModel) :
     username : str = Field(max_length=16)
@@ -25,6 +26,7 @@ class UserModel(BaseModel) :
 
 class UserBooksModel(UserModel) :
     books : List[models.Book] 
+    reviews : List[ReviewModel]
 
 class UserLoginModel(BaseModel) :
     email : EmailStr
