@@ -5,6 +5,7 @@ from src.db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from .dependencies import RefreshTokenBearer, AccessTokenBearer, get_current_user, RoleChecker
 from src.db.redis import add_jti_to_blocklist
+from src.errors import UserAlreadyExists, UserNotFound, InvalidCredentials, InvalidToken
 
 from .utils import HashHelper
 from datetime import timedelta, datetime
@@ -26,7 +27,8 @@ async def create_user_account(user_data : UserCreateModel, session : AsyncSessio
     user_exists = await user_service.user_exists(email, session)
 
     if user_exists :
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User with this email already exists.")
+        raise UserAlreadyExists()
+        # raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User with this email already exists.")
     new_user = await user_service.create_user(user_data, session)
 
     return new_user
@@ -70,8 +72,9 @@ async def login_users(login_data : UserLoginModel, session : AsyncSession = Depe
                     }
                 }
             )
+    raise InvalidCredentials()
         
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+    # raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
 
 @auth_router.get("/refresh_token")
 async def get_new_access_token(token_details : dict = Depends(RefreshTokenBearer())) :
