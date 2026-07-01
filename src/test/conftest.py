@@ -2,6 +2,12 @@ import pytest
 
 from src.auth.utils import HashHelper
 
+from unittest.mock import MagicMock
+
+from ..auth.dependencies import RoleChecker
+
+from src.auth.utils import HashHelper
+
 # HASH HELPER CONFIG
 @pytest.fixture
 def password_data() :
@@ -12,11 +18,6 @@ def password_data() :
         "plain" :plain ,
         "hashed" : hashed
     }
-
-
-from unittest.mock import MagicMock
-
-from ..auth.dependencies import RoleChecker
 
 # ROLE CHECKER
 @pytest.fixture
@@ -33,7 +34,7 @@ def mock_user_factory() :
 
 
 # JWT CHECKER
-from src.auth.utils import HashHelper
+
 
 @pytest.fixture
 def valid_user_payload() :

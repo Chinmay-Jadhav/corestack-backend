@@ -1,5 +1,4 @@
 from fastapi import status, APIRouter, Depends
-from fastapi.exceptions import HTTPException
 
 from src import books
 from src.db.models import Book as BookModel

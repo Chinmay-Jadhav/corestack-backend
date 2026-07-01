@@ -4,11 +4,12 @@ from logging.config import fileConfig
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlmodel import SQLModel
 
 from alembic import context
 
-from src.db.models import User, Book
-from sqlmodel import SQLModel, Field, Column
+# from src.db.models import User, Book
+# from sqlmodel import SQLModel, Field, Column
 
 from src.config import Config
 

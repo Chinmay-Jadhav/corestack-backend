@@ -1,5 +1,4 @@
-from fastapi import FastAPI, status
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 
 from src.books.routes import book_router
 from src.auth.routes import auth_router 
@@ -11,10 +10,10 @@ from src.errors import register_error_handlers
 
 @asynccontextmanager
 async def life_span(app : FastAPI) :
-    print(f"Server is starting ... ")
+    print("Server is starting ... ")
     await init_db()
     yield
-    print(f"Server has been stopped")
+    print("Server has been stopped")
 
 version = "v1"
 

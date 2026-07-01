@@ -1,7 +1,6 @@
 from pwdlib import PasswordHash
 from datetime import timedelta, datetime, timezone
 import jwt
-from jwt.exceptions import InvalidTokenError
 from src.config import Config
 import uuid
 import logging

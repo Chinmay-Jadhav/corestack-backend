@@ -1,5 +1,3 @@
-import asyncio
-# import aioredis
 from redis import asyncio as aioredis
 from datetime import timedelta
 

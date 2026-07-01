@@ -5,10 +5,10 @@ from src.db.main import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from .dependencies import RefreshTokenBearer, AccessTokenBearer, get_current_user, RoleChecker
 from src.db.redis import add_jti_to_blocklist
-from src.errors import UserAlreadyExists, UserNotFound, InvalidCredentials, InvalidToken
+from src.errors import UserAlreadyExists, InvalidCredentials
 
 from .utils import HashHelper
-from datetime import timedelta, datetime
+from datetime import timedelta
 from fastapi.responses import JSONResponse
 
 auth_router = APIRouter()

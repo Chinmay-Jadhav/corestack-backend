@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, EmailStr
 import uuid
-from datetime import datetime, date
-from typing import Optional, List
+from datetime import datetime
+from typing import List
 
 from src.db import models
 from src.reviews.schemas import ReviewModel

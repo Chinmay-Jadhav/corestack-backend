@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, date
 from typing import List
 
-from src.reviews.schemas import ReviewModel, ReviewCreateModel
+from src.reviews.schemas import ReviewModel
 from src.tags.schemas import TagModel
 
 class Book(BaseModel) :

@@ -1,8 +1,7 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 from .schemas import BookCreateModel, BookUpdateModel
-from sqlmodel import select, desc, delete
+from sqlmodel import select, desc
 from src.db.models import Book
-from datetime import datetime
 import uuid
 
 class BookService :
